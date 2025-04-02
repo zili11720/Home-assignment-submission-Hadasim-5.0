@@ -62,3 +62,7 @@ def process_large_log(file_path, n=10):
 
 if __name__ == "__main__":
     process_large_log("logs.txt", n=3)
+
+
+
+#סעיף ה בקובץ וורד וכן בקובץ טקסט 
