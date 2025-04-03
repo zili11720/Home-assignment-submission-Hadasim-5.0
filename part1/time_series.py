@@ -5,11 +5,13 @@ from pathlib import Path
 import os
 from multiprocessing import Pool, cpu_count
 import csv
+import pandas as pd
+import math
     
 chunks_folder="daily_chunks"#folder for partial files
 
 
-#1. validation 2. Avrages calculation
+#1. validation and Avrages calculation
 #Both tasks are done with one scan of the file
 def validate_and_calc_avg(file_path):
     #Define a dictionary for averages calculation
@@ -70,7 +72,7 @@ def validate_and_calc_avg(file_path):
     
     return hourly_avg
 
-#3. process each sub file and combine the results
+#2. process each sub file and combine the results
 def process_all_days():
     # get all sub files
     day_files = [os.path.join(chunks_folder, f) for f in os.listdir(chunks_folder)]
@@ -92,7 +94,7 @@ def process_all_days():
             writer.writerow([hour.strftime("%Y-%m-%d %H:%M:%S"), combined_results[hour]])
 
 
-#3. file devision approach+ nultiprocessing for efficency
+#2. file devision approach+ nultiprocessing for efficency
 def split_by_day(inputfile):
     Path(chunks_folder).mkdir(exist_ok=True)
     with open(inputfile, 'r') as f:
@@ -107,13 +109,43 @@ def split_by_day(inputfile):
             with open(day_file_path, 'a') as day_file:
                 day_file.write(line)
         
-  
+
+#4. parquet format
+# הפורמט שומר את המידע לפי עמודות ולא שורות 
+# וממאפשר קריאה מהירה בהרבה בצורה מקבילית על ידי קוד קצר יחסית
+def validate_and_calc_avg_parquet(parquet_file):
+    df = pd.read_parquet(parquet_file)
+
+    if 'value' not in df.columns or 'timestamp' not in df.columns:
+        raise ValueError("Parquet file must contain 'timestamp' and 'value' columns")
+
+    df["value"] = pd.to_numeric(df["value"], errors="coerce")
+    df = df[~df["value"].isna()]
+    df = df[~df["value"].isin([float("inf"), float("-inf")])]
+
+    df["Timestamp"] = pd.to_datetime(df["Timestamp"], errors="coerce")
+    df = df[~df["Timestamp"].isna()]
+
+    df["hour"] = df["Timestamp"].dt.floor("H")
+
+    df = df.drop_duplicates()
+
+    grouped = df.groupby("hour")["value"].mean().reset_index()
+    grouped.columns = ["Timestamp", "Average"]
+    grouped.to_csv("time_series_output.csv", index=False)
+
+    return grouped
+
+
 if __name__ == "__main__":
-    # for exercises 1,2 alone run:
-    #validate_and_calc_avg("time_series.csv")
+    # for exercises 1 alone run:
+    validate_and_calc_avg("time_series.csv")
 
     #for exercise 3 with file splitting run:
-    split_by_day("time_series.csv")
-    process_all_days()
+    #split_by_day("time_series.csv")
+    #process_all_days()
+
+    #for exercise 4
+    #validate_and_calc_avg_parquet("time_series.parquet") 
 
 #An answer for exercise 4 in the docks file 
