@@ -1,7 +1,13 @@
 import hashlib
 from datetime import datetime
 import math
+from pathlib import Path
+import os
+from multiprocessing import Pool, cpu_count
+import csv
     
+chunks_folder="daily_chunks"#folder for partial files
+
 
 #1. validation 2. Avrages calculation
 #Both tasks are done with one scan of the file
@@ -50,7 +56,7 @@ def validate_and_calc_avg(file_path):
                     continue
 
             #If all parts are valid add the value to the average of the hour
-            hour_start = parsed_time.replace(minute=0, second=0, microsecond=0).time()#get the round hour for dictioning
+            hour_start = parsed_time.replace(minute=0, second=0, microsecond=0)#get the round hour for dictioning
             if hour_start not in hourly_sum:
                hourly_sum[hour_start] = 0.0
                hourly_count[hour_start] = 0
@@ -61,10 +67,53 @@ def validate_and_calc_avg(file_path):
        hourly_avg[hour] = 0.0
        hourly_avg[hour]=hourly_sum[hour]/hourly_count[hour]
        print(hour," ",round(hourly_avg[hour],4))
-         
+    
+    return hourly_avg
 
-    
-     
+#3. process each sub file and combine the results
+def process_all_days():
+    # get all sub files
+    day_files = [os.path.join(chunks_folder, f) for f in os.listdir(chunks_folder)]
+
+    #use multiprocessing for better efficiency
+    with Pool(processes=cpu_count()) as pool:
+        results = pool.map(validate_and_calc_avg, day_files)
+
+    #combine the results
+    combined_results = {}
+    for day_result in results:
+        for hour, avg in day_result.items():
+            combined_results[hour] = avg
+    #write the results into an output file in csv format
+    with open("time_series_output.csv", 'w', newline='') as f:
+        writer = csv.writer(f)
+        writer.writerow(["Timestamp", "Average"])
+        for hour in sorted(combined_results):
+            writer.writerow([hour.strftime("%Y-%m-%d %H:%M:%S"), combined_results[hour]])
+
+
+#3. file devision approach+ nultiprocessing for efficency
+def split_by_day(inputfile):
+    Path(chunks_folder).mkdir(exist_ok=True)
+    with open(inputfile, 'r') as f:
+        header = f.readline()
+        for line in f:
+            parts = line.strip().split(',', 1)
+            if len(parts) != 2:
+                continue
+            ts = parts[0].strip()
+            date_str = ts.split(' ')[0].replace('/', '-')
+            day_file_path = os.path.join(chunks_folder, f"{date_str}.csv")
+            with open(day_file_path, 'a') as day_file:
+                day_file.write(line)
+        
+  
 if __name__ == "__main__":
-    validate_and_calc_avg("time_series.csv")
-    
+    # for exercises 1,2 alone run:
+    #validate_and_calc_avg("time_series.csv")
+
+    #for exercise 3 with file splitting run:
+    split_by_day("time_series.csv")
+    process_all_days()
+
+#An answer for exercise 4 in the docks file 
