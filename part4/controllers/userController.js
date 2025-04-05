@@ -22,6 +22,37 @@ async function login(req, res) {
   }
 }
 
+async function logout(req,res){
+  try{
+    req.session.destroy(); // Destroy session
+
+   res.render('pages/index'); //redirect to login page
+
+  }
+  catch(err){
+    console.error('Error loging out:', err);
+  }   
+}
+
+async function signup(req,res){
+  try{
+    const {company_name,phone,representative_name,password} =req.body;
+    console.log("hi from signup");
+    await userModel.registerUser(
+      { company_name,
+        phone,
+        representative_name,
+        password }
+    );
+    res.redirect('/grocery/products'); //redirect to product page
+  }
+  catch(err){
+      res.render('pages/index', {
+      alertMessage: err.message || "שגיאה בהוספת משתמש"
+    });
+  }   
+}
+
 module.exports = {
-  login
+  login,logout,signup
 };

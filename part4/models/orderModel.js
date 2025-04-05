@@ -52,4 +52,24 @@ async function getSupplierOrders(supplierId) {
   }
 }
 
-module.exports = { getSupplierOrders };
+async function confirmOrder(order_id){
+  try{
+    await sql.connect(db);
+
+    console.log("hi from confirm order2",order_id);
+    await sql.query`
+      UPDATE orders
+      SET status = 'In Progress'
+      WHERE id = ${order_id}
+    `;
+
+  }
+  catch(err){
+    console.error('Error accessing DB:', err);
+    throw err;
+  }
+}
+
+module.exports = { getSupplierOrders ,
+  confirmOrder
+};

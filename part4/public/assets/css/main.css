@@ -1837,6 +1837,7 @@ input, select, textarea {
 	input[type="password"],
 	input[type="email"],
 	input[type="number"],
+	input[type="tel"],
 	select,
 	textarea {
 		-moz-appearance: none;
@@ -1858,6 +1859,7 @@ input, select, textarea {
 		input[type="password"]:invalid,
 		input[type="email"]:invalid,
 		input[type="number"]:invalid,
+		input[type="tel"]:invalid,
 		select:invalid,
 		textarea:invalid {
 			box-shadow: none;
@@ -1867,6 +1869,7 @@ input, select, textarea {
 		input[type="password"]:focus,
 		input[type="email"]:focus,
 		input[type="number"]:focus,
+		input[type="tel"]:focus,
 		select:focus,
 		textarea:focus {
 			box-shadow: 0 0 0 2px #21b2a6;
@@ -1893,6 +1896,7 @@ input, select, textarea {
 	input[type="password"],
 	input[type="email"],
 	input[type="number"],
+	input[type="tel"],
 	select {
 		height: 2.75em;
 	}
@@ -4170,7 +4174,7 @@ input, select, textarea {
 	display: none;
   }
   
-  #addProductModal form {
+  .modal form {
 	background-color: white;
 	padding: 30px;
 	border-radius: 12px;

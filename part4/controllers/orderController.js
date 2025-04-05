@@ -2,10 +2,8 @@ const orderModel = require('../models/orderModel');
 
 async function renderOrdersPage(req, res) {
     const supplierId = req.session.supplier_id;
-    console.log("hi from orders");
     try {
       const orders = await orderModel.getSupplierOrders(supplierId);
-      console.log(JSON.stringify(orders, null, 2));
       res.render("pages/orders", { orders });
 
     } catch (err) {
@@ -13,7 +11,19 @@ async function renderOrdersPage(req, res) {
     }
   }
 
+  async function confirmOrder(req, res) {
+    try {
+      const { order_id } = req.body;
+      console.log("hi from confirm order");
+      await orderModel.confirmOrder(order_id);
+      res.redirect('/grocery/orders');
+
+    } catch (err) {
+      res.status(500).send("Server error"); 
+    }
+  }
+
 module.exports={
-    renderOrdersPage
+    renderOrdersPage, confirmOrder
 }
   

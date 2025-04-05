@@ -20,6 +20,12 @@
               <p><strong>תאריך הזמנה:</strong> <%= new Date(order.order_date).toLocaleDateString() %></p>
               <p><strong>סטטוס:</strong> <%= order.status %></p>
               <button class="button primary" data-target="items-<%= index %>">הצג/הסתר פריטים</button>
+              <% if (order.status === 'pending') { %>
+                <form method="POST" action="/grocery/orders/confirmOrder" style="display: inline;">
+                  <input type="hidden" name="order_id" value="<%= order.order_id %>">
+                  <button type="submit" class="button primary">אשר הזמנה</button>
+                </form>
+              <% } %>           
             </div>
 
             <div class="order-items hidden" id="items-<%= index %>">

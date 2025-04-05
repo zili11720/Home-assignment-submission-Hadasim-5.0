@@ -44,5 +44,6 @@ const users = [
   { username: 'herzel', password: 'admin123' },
   { username: 'freshfarms', password: 'farm123' },
   { username: 'superveggies', password: 'veggie123' },
-  { username: 'dairydaily', password: 'milk123' }
+  { username: 'dairydaily', password: 'milk123' },
+  { username: 'foodIsGood', password: 'food123' }
 ];

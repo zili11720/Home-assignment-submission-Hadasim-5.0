@@ -5,13 +5,14 @@ async function renderProductsPage(req, res) {
 
   
     try {
-      const products = await productModel.getSupplierProducts(supplierId);
+      const products = await productModel.getSupplierProducts(supplierId)  || [];
       res.render("pages/products", { products });
 
     } catch (err) {
       res.status(500).send("Server error"); 
     }
   }
+
   async function addNewProduct(req, res) {
     try {
       const supplierId = req.session.supplier_id;
