@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+  <%- include('../partials/head') %>
+  <body>
+    <%- include('../partials/header') %>
+    
+    
+    <main class="main-page">
+      <section class="main-headline">
+        <h2>המוצרים שלי
+          <button id="addProductBtn" >+</button>
+        </h2>
+      </section>
+
+      <section class="product-section">
+        <div class="product-grid-new">
+          <% products.forEach(product => { %>
+            <div class="product-card-new">
+              <h3><%= product.product_name %></h3>
+              <p><strong>מחיר:</strong> $<%= product.price_per_unit.toFixed(2) %></p>
+              <p><strong>מינימום:</strong> <%= product.min_quantity %> יח'</p>
+            </div>
+          <% }) %>
+        </div>
+      </section>
+
+      <div id="addProductModal" class="modal hidden">
+          <form id="addProductForm" method="POST" action="/grocery/products/addProduct">
+            <label>שם מוצר:</label>
+            <input type="text" name="product_name" required />
+      
+            <label>מחיר ליחידה:</label>
+            <input type="number" name="price_per_unit" step="0.01" required />
+      
+            <label>כמות מינימום להזמנה:</label>
+            <input type="number" name="min_quantity" required />
+      
+            <div class="modal-actions">
+              <button type="submit" class="button primary">הוסף</button>
+            </div>
+          </form>
+      </div>
+      
+    </main>
+  
+  
+
+    <!-- Scripts -->
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const modal = document.getElementById("addProductModal");
+        const openBtn = document.getElementById("addProductBtn");
+        const closeBtn = document.getElementById("closeModal");
+    
+        openBtn.addEventListener("click", () => {
+          modal.classList.remove("hidden");
+        });
+    
+        closeBtn.addEventListener("click", () => {
+          modal.classList.add("hidden");
+        });
+      });
+    </script>
+    
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/jquery.scrollex.min.js"></script>
+			<script src="assets/js/jquery.scrolly.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+
+
+  </body>
+</html>

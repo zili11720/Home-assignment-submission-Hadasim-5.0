@@ -1,0 +1,74 @@
+<!DOCTYPE HTML>
+<html>
+	<%- include('../partials/head') %>
+	<body class="landing is-preload">
+
+		<!-- Check if there's an alertMessage and display it as a pop-up -->
+        <% if (typeof alertMessage !== 'undefined') { %>
+         <script>
+             alert("<%= alertMessage %>");
+         </script>
+         <% } %>
+		<!-- Page Wrapper -->
+			<div id="page-wrapper">
+
+				<!-- Header -->
+				<%- include('../partials/header') %>
+
+				<!-- Banner -->
+					<section id="banner">
+						<div class="inner">
+							<h2>המכולת של הרצל</h2>
+							<p>ברוכים הבאים<br /><br />
+						</div>
+						<form action="/grocery/login" method="POST" class="login-form">
+							<div class="login-container">
+								<input type="text" name="username" placeholder="Username" required class="input"><br/>
+								<input type="password" name="password" placeholder="Password" required class="input"><br/>
+								<ul class="actions special">
+									<li><input type="submit" class="button" value="Log In"></li>
+								</ul>
+							</div>
+							<ul class="actions special">
+								<li><a href="#" class="button primary">הירשם</a></li><br>
+							</ul>
+						</form>
+
+						<a href="#one" class="more scrolly">קצת עלי</a>
+					</section>
+
+					<section id="two" class="wrapper alt style2">
+						<section class="spotlight">
+							<div class="image"><img src="images/pic01.jpg" alt="" /></div><div class="content">
+								<h2>Magna primis lobortis<br />
+								sed ullamcorper</h2>
+								<p>Aliquam ut ex ut augue consectetur interdum. Donec hendrerit imperdiet. Mauris eleifend fringilla nullam aenean mi ligula.</p>
+							</div>
+						</section>
+						<section class="spotlight">
+							<div class="image"><img src="images/pic02.jpg" alt="" /></div><div class="content">
+								<h2>Tortor dolore feugiat<br />
+								elementum magna</h2>
+								<p>Aliquam ut ex ut augue consectetur interdum. Donec hendrerit imperdiet. Mauris eleifend fringilla nullam aenean mi ligula.</p>
+							</div>
+						</section>
+						<section class="spotlight">
+							<div class="image"><img src="images/pic03.jpg" alt="" /></div><div class="content">
+								<h2>Augue eleifend aliquet<br />
+								sed condimentum</h2>
+								<p>Aliquam ut ex ut augue consectetur interdum. Donec hendrerit imperdiet. Mauris eleifend fringilla nullam aenean mi ligula.</p>
+							</div>
+						</section>
+					</section>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/jquery.scrollex.min.js"></script>
+			<script src="assets/js/jquery.scrolly.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+
+	</body>
+</html>

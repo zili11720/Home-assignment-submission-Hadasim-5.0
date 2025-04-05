@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+  <%- include('../partials/head') %>
+  <body>
+    <%- include('../partials/header') %>
+    
+    
+    <main class="main-page">
+      <section class="orders-section">
+        <h2 class="orders-title">הזמנות שבוצעו</h2>
+
+        <% if (orders.length === 0) { %>
+          <p>לא נמצאו הזמנות.</p>
+        <% } %>
+
+        <% orders.forEach((order, index) => { %>
+          <div class="order-card">
+            <div class="order-summary">
+              <p><strong>מזהה הזמנה:</strong> <%= order.order_id %></p>
+              <p><strong>תאריך הזמנה:</strong> <%= new Date(order.order_date).toLocaleDateString() %></p>
+              <p><strong>סטטוס:</strong> <%= order.status %></p>
+              <button class="button primary" data-target="items-<%= index %>">הצג/הסתר פריטים</button>
+            </div>
+
+            <div class="order-items hidden" id="items-<%= index %>">
+              <% order.items.forEach(item => { %>
+                <div class="order-item">
+                  <p>שם מוצר: <%= item.product_name %> כמות: <%= item.quantity %>     </p>
+                </div>
+              <% }) %>
+            </div>
+          </div>
+        <% }) %>
+      </section>
+    </main>
+  
+  
+
+    <!-- Scripts -->
+    <script src="/js/jquery.min.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const buttons = document.querySelectorAll(".button.primary");
+        buttons.forEach(btn => {
+          btn.addEventListener("click", () => {
+            const target = document.getElementById(btn.dataset.target);
+            target.classList.toggle("hidden");
+          });
+        });
+      });
+    </script>
+
+		<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/jquery.scrollex.min.js"></script>
+			<script src="assets/js/jquery.scrolly.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+
+
+  </body>
+</html>

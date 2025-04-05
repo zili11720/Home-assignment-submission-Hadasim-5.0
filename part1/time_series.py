@@ -64,12 +64,14 @@ def validate_and_calc_avg(file_path):
                hourly_count[hour_start] = 0
             hourly_sum[hour_start]+=value
             hourly_count[hour_start]+=1
+            
 
+    
     for hour in hourly_sum:
        hourly_avg[hour] = 0.0
        hourly_avg[hour]=hourly_sum[hour]/hourly_count[hour]
-       print(hour," ",round(hourly_avg[hour],4))
-    
+       #print(hour," ",round(hourly_avg[hour],4))
+
     return hourly_avg
 
 #2. process each sub file and combine the results
