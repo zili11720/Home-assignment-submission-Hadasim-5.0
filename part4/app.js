@@ -1,6 +1,7 @@
 const userRouter = require("./routes/userRoutes"); // User-related routes
 const productRouter = require('./routes/productRoutes');//products related routes
 const  orderRouter= require('./routes/orderRoutes');//orders related routes
+const {requireLogin }= require('./middleware');
 
 const express = require('express')
 const session = require("express-session");
@@ -29,8 +30,8 @@ app.get("/grocery", (req, res) => {
 
 
 app.use("/grocery", userRouter); 
-app.use("/grocery/products", productRouter);
-app.use("/grocery/orders", orderRouter);
+app.use("/grocery/products",requireLogin, productRouter);
+app.use("/grocery/orders", requireLogin,orderRouter);
 
 
 app.listen(port, () => {

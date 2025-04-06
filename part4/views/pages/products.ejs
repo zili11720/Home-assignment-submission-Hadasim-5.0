@@ -26,6 +26,7 @@
 
       <div id="addModal" class="modal hidden">
           <form id="addForm" method="POST" action="/grocery/products/addProduct">
+            <span id="closeAddModal" class="close-button">&times;</span>
             <label>שם מוצר:</label>
             <input type="text" name="product_name" required />
       
@@ -50,9 +51,13 @@
       document.addEventListener("DOMContentLoaded", function () {
         const modal = document.getElementById("addModal");
         const openBtn = document.getElementById("addProductBtn");
+        const closeBtn = document.getElementById("closeAddModal");
     
         openBtn.addEventListener("click", () => {
           modal.classList.remove("hidden");
+        });
+        closeBtn.addEventListener("click", () => {
+              modal.classList.add("hidden");
         });
       });
     </script>

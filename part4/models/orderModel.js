@@ -4,8 +4,9 @@ const { db } = require('../DBconfig');
 async function getSupplierOrders(supplierId) {
   try {
     await sql.connect(db);
-    console.log("hi");
-    const result = await sql.query`
+    let result=null;
+    if(supplierId){//get orders of a specific supplier
+      result = await sql.query`
       SELECT 
         o.id AS order_id,
         o.order_date,
@@ -18,6 +19,22 @@ async function getSupplierOrders(supplierId) {
       WHERE o.supplier_id = ${supplierId}
       ORDER BY o.order_date ASC;
     `;
+    }
+    else{//get all orders for manager
+      result = await sql.query`
+      SELECT 
+        o.id AS order_id,
+        o.order_date,
+        o.status,
+        p.product_name,
+        oi.quantity
+      FROM orders o
+      JOIN orderItems oi ON o.id = oi.order_id
+      JOIN products p ON p.id=oi.product_id
+      ORDER BY o.order_date ASC;
+    `;
+
+    }
 
     if (result.recordset.length === 0) {
       return []; //no orders where found
@@ -52,17 +69,26 @@ async function getSupplierOrders(supplierId) {
   }
 }
 
-async function confirmOrder(order_id){
-  try{
-    await sql.connect(db);
 
-    console.log("hi from confirm order2",order_id);
-    await sql.query`
+async function changeStatus(order_id,role){
+  try{
+
+    console.log("hi from status change");
+    await sql.connect(db);
+    if(role=='supplier'){
+      await sql.query`
       UPDATE orders
       SET status = 'In Progress'
       WHERE id = ${order_id}
     `;
-
+    }
+    else{//owner
+      await sql.query`
+      UPDATE orders
+      SET status = 'Completed'
+      WHERE id = ${order_id}
+    `;
+     }
   }
   catch(err){
     console.error('Error accessing DB:', err);
@@ -70,6 +96,5 @@ async function confirmOrder(order_id){
   }
 }
 
-module.exports = { getSupplierOrders ,
-  confirmOrder
+module.exports = { getSupplierOrders ,changeStatus
 };

@@ -1,29 +1,41 @@
 const orderModel = require('../models/orderModel');
 
 async function renderOrdersPage(req, res) {
-    const supplierId = req.session.supplier_id;
+    console.log("hi from orders")
+    const role=req.session.role
     try {
-      const orders = await orderModel.getSupplierOrders(supplierId);
-      res.render("pages/orders", { orders });
+      if( role=='supplier'){
+        const supplierId = req.session.supplier_id;
+        const orders = await orderModel.getSupplierOrders(supplierId) || [];
+        res.render("pages/orders", { orders,role });
+      }
+      else{//manager
+
+        const orders = await orderModel.getSupplierOrders(null) || [];
+        console.log("orders:",orders);
+        res.render("pages/orders", { orders,role });
+
+      }
 
     } catch (err) {
-      res.status(500).send("Server error"); //error is thrown why??/?
+      res.status(500).send("Server error");
     }
   }
 
-  async function confirmOrder(req, res) {
+  async function changeStatus(req, res) {
     try {
+      const role=req.session.role
       const { order_id } = req.body;
-      console.log("hi from confirm order");
-      await orderModel.confirmOrder(order_id);
+      await orderModel.changeStatus(order_id,role);
       res.redirect('/grocery/orders');
 
     } catch (err) {
       res.status(500).send("Server error"); 
     }
   }
+  
 
 module.exports={
-    renderOrdersPage, confirmOrder
+    renderOrdersPage,changeStatus
 }
   

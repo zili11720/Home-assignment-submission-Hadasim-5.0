@@ -12,9 +12,6 @@
 		<!-- Page Wrapper -->
 			<div id="page-wrapper">
 
-				<!-- Header -->
-				<%- include('../partials/header') %>
-
 				<!-- Banner -->
 					<section id="banner">
 						<div class="inner">
@@ -35,8 +32,9 @@
 						</form>
 
 						
-						<div id="registerModal" class="modal hidden">
+						<div id="registerModal" class="modal hidden"> 
 							<form id="addForm" method="POST" action="/grocery/signup">
+								<span id="closeRegisterModal" class="close-button">&times;</span>
 								<label>שם חברה:</label>
 								<input type="text" name="company_name" required />
 								<label>מספר טלפון</label>
@@ -63,10 +61,10 @@
 			  openBtn.addEventListener("click", () => {
 				modal.classList.remove("hidden");
 			  });
-		  
+
 			  closeBtn.addEventListener("click", () => {
-				modal.classList.add("hidden");
-			  });
+              modal.classList.add("hidden");
+              });
 			});
 		  </script>
 		  
