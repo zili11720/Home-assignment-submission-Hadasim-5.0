@@ -155,4 +155,4 @@ if __name__ == "__main__":
      print(df.head(4))
     #validate_and_calc_avg_parquet("time_series.parquet") 
 
-#An answer for question 3 (data stream)  in the docks file 
+#An answer for question 3 (data stream)  in the docks/pdf file page2 under this folder 
