@@ -61,8 +61,17 @@ def process_large_log(file_path, n=10):
         print(f"{code}: {count}")
 
 if __name__ == "__main__":
-    process_large_log("logs.txt", n=3)
+    process_large_log("logs.txt", n=5)
+
+
+#output:
+#Top 5 error codes:
+#WARN_101": 200098
+#ERR_404": 200094
+#ERR_400": 200069
+#INFO_200": 199931
+#ERR_500": 199808
 
 
 
-#סעיף ה בקובץ וורד וכן בקובץ טקסט 
+#סעיף ה בקובץ וורד 
