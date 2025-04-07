@@ -2,12 +2,20 @@
 <html>
   <%- include('../partials/head') %>
   <body>
-    <%- include('../partials/header') %>
+    <% if (role === 'supplier') { %>
+      <%- include('../partials/header') %>
+    <% } %>
+    <% if (role === 'owner') { %>
+      <%- include('../partials/manager_header') %>
+    <% } %>
+    
     
     
     <main class="main-page">
+      <section class="main-headline">
+        <h2>הזמנות שבוצעו
+        </h2>
       <section class="orders-section">
-        <h2 class="orders-title">הזמנות שבוצעו</h2>
 
         <% if (orders.length === 0) { %>
           <p>לא נמצאו הזמנות.</p>
@@ -32,7 +40,7 @@
             <div class="order-items hidden" id="items-<%= index %>">
               <% order.items.forEach(item => { %>
                 <div class="order-item">
-                  <p>שם מוצר: <%= item.product_name %> כמות: <%= item.quantity %>     </p>
+                  <p>שם מוצר:<%= item.product_name %>   כמות: <%= item.quantity %>   </p>  
                 </div>
               <% }) %>
             </div>

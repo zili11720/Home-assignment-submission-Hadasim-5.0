@@ -31,6 +31,7 @@ footer, header, hgroup, menu, nav, section {
 
 body {
 	line-height: 1;
+	direction: rtl;
 }
 
 ol, ul {
@@ -87,7 +88,7 @@ input, select, textarea {
 	}
 
 	body {
-		background: #59c4ad;
+		background: #dcd9cc;
 	}
 
 		body.is-preload *, body.is-preload *:before, body.is-preload *:after {
@@ -2502,7 +2503,7 @@ input, select, textarea {
 		input[type="button"].primary,
 		button.primary,
 		.button.primary {
-			background-color: #ed4933;
+			background-color: #21b2a6;
 			box-shadow: none !important;
 			color: #ffffff !important;
 		}
@@ -2512,7 +2513,7 @@ input, select, textarea {
 			input[type="button"].primary:hover,
 			button.primary:hover,
 			.button.primary:hover {
-				background-color: #ef5e4a !important;
+				background-color: #239a90!important;
 			}
 
 			input[type="submit"].primary:active,
@@ -2520,7 +2521,7 @@ input, select, textarea {
 			input[type="button"].primary:active,
 			button.primary:active,
 			.button.primary:active {
-				background-color: #eb341c !important;
+				background-color: #239a90 !important;
 			}
 
 		input[type="submit"].disabled, input[type="submit"]:disabled,
@@ -3535,7 +3536,7 @@ input, select, textarea {
 
 							#header nav > ul > li > a.menuToggle:after {
 								background-image: url("images/bars.svg");
-								background-position: right center;
+								background-position: left center;
 								background-repeat: no-repeat;
 								content: '';
 								display: inline-block;
@@ -3980,10 +3981,7 @@ input, select, textarea {
 /* Landing */
 
 	body.landing #page-wrapper {
-		background-image: -moz-linear-gradient(top, rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url("../../images/banner.jpg");
-		background-image: -webkit-linear-gradient(top, rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url("../../images/banner.jpg");
-		background-image: -ms-linear-gradient(top, rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url("../../images/banner.jpg");
-		background-image: linear-gradient(top, rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url("../../images/banner.jpg");
+		background: #dcd9cc;
 		background-attachment: fixed;
 		background-position: center center;
 		background-repeat: no-repeat;
@@ -4056,12 +4054,12 @@ input, select, textarea {
   
   /* כותרת ראשית */
   .main-headline {
-	text-align: center;
 	margin-bottom: 50px;
   }
   
   .main-headline h2 {
-	font-size: 2.5em;
+	text-align: center !important;
+	font-size: 1.35em;
 	color: #333;
 	margin-bottom: 10px;
   }
@@ -4108,10 +4106,6 @@ input, select, textarea {
 	margin: auto;
   }
   
-  .orders-title {
-	text-align: center;
-	margin-bottom: 30px;
-  }
   
   .order-card {
 	border: 1px solid #ccc;
@@ -4263,7 +4257,7 @@ input, select, textarea {
 	padding: 6px;
 	border-bottom: 1px solid #ddd;
   }
-  
+
   .remove-btn {
 	background: none;
 	border: none;
@@ -4271,6 +4265,27 @@ input, select, textarea {
 	font-size: 10px;
 	cursor: pointer;
   }
+
+
+  .inventory-table {
+	width: 100%;
+	border-collapse: collapse;
+	margin-top: 1rem;
+  }
+
+  .inventory-table th {
+	background-color: #21b2a6;
+	color: rgb(3, 3, 3);
+  }
+
+  .cash-register {
+	margin-top: 2rem;
+	background: #f9f9f9;
+	padding: 1rem;
+	border-radius: 12px;
+	box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  }
+
   
   
 

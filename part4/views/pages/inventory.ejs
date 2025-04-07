@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+  <%- include('../partials/head') %>
+  <body>
+    <%- include('../partials/manager_header') %>
+
+    <main class="main-page">
+      <section class="main-headline">
+        <h2>ניהול מלאי</h2>
+        <p>.לאחר מכירת מוצרים ,במקרה הצורך, יתבצע חידוש מלאי אוטומטי על ידי רכישה מספק מתאים</p>
+      </section>
+
+      <div class="main-layout">
+        <!-- Inventory table -->
+        <section class="inventory-section">
+          <h1>מלאי נוכחי</h1>
+          <table class="inventory-table">
+            <thead>
+              <tr>
+                <th>שם מוצר</th>
+                <th>כמות מינימלית</th>
+                <th>כמות נוכחית</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% inventory.forEach(item => { %>
+                <tr>
+                  <td><%= item.product_name %></td>
+                  <td><%= item.min_quantity %></td>
+                  <td><%= item.current_quantity %></td>
+                </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        </section>
+
+        <!-- Cash cart -->
+        <section class="cash-register">
+          <h3>קופה</h3>
+
+          <!-- Form for sending purchase -->
+          <form id="cashForm" method="POST" action="/grocery/inventory/purchase">
+            <input type="hidden" name="cartData" id="cartData" />
+
+            <!-- Add product input -->
+            <div class="add-to-cart-row">
+              <input type="text" id="productNameInput" placeholder="שם מוצר" required />
+              <input type="number" id="quantityInput" placeholder="כמות" min="1" required />
+              <button type="button" id="addToCartBtn">➕</button>
+            </div>
+
+            <!-- Cart items view -->
+            <div id="cartItems" class="cart-items"></div>
+
+            <button type="submit" class="button primary">בצע מחירה</button>
+          </form>
+        </section>
+      </div>
+    </main>
+
+    <!-- Scripts -->
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const cart = {};
+        const cartItemsEl = document.getElementById("cartItems");
+        const cartDataInput = document.getElementById("cartData");
+        const addBtn = document.getElementById("addToCartBtn");
+
+        addBtn.addEventListener("click", () => {
+          const name = document.getElementById("productNameInput").value.trim();
+          const quantity = parseInt(document.getElementById("quantityInput").value);
+
+          if (!name || isNaN(quantity) || quantity < 1) {
+            alert("נא להזין שם מוצר וכמות חוקית");
+            return;
+          }
+
+          if (!cart[name]) {
+            cart[name] = { product_name: name, quantity: 0 };
+          }
+
+          cart[name].quantity += quantity;
+
+          document.getElementById("productNameInput").value = "";
+          document.getElementById("quantityInput").value = 1;
+
+          renderCart();
+        });
+
+        function renderCart() {
+          cartItemsEl.innerHTML = "";
+
+          Object.values(cart).forEach(item => {
+            const div = document.createElement("div");
+            div.classList.add("cart-item");
+            div.innerHTML = `
+              ${item.product_name} - ${item.quantity} יח'
+              <button class="remove-btn" data-name="${item.product_name}">❌</button>
+            `;
+            cartItemsEl.appendChild(div);
+          });
+
+          cartDataInput.value = JSON.stringify(Object.values(cart));
+
+          document.querySelectorAll(".remove-btn").forEach(btn => {
+            btn.addEventListener("click", () => {
+              const name = btn.dataset.name;
+              delete cart[name];
+              renderCart();
+            });
+          });
+        }
+      });
+    </script>
+
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/js/jquery.scrollex.min.js"></script>
+    <script src="assets/js/jquery.scrolly.min.js"></script>
+    <script src="assets/js/browser.min.js"></script>
+    <script src="assets/js/breakpoints.min.js"></script>
+    <script src="assets/js/util.js"></script>
+    <script src="assets/js/main.js"></script>
+  </body>
+</html>

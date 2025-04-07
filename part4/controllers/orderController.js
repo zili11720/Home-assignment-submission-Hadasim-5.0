@@ -1,7 +1,6 @@
 const orderModel = require('../models/orderModel');
 
 async function renderOrdersPage(req, res) {
-    console.log("hi from orders")
     const role=req.session.role
     try {
       if( role=='supplier'){
@@ -12,7 +11,6 @@ async function renderOrdersPage(req, res) {
       else{//manager
 
         const orders = await orderModel.getSupplierOrders(null) || [];
-        console.log("orders:",orders);
         res.render("pages/orders", { orders,role });
 
       }

@@ -6,9 +6,9 @@
     
     
     <main class="main-page">
-      <section class="main-headline">
+      <section class="main-title">
         <h2>המוצרים שלי
-          <button id="addProductBtn" >+</button>
+          <button id="addProductBtn" style="all: unset; border: none; background: none; ">+</button>
         </h2>
       </section>
 
@@ -17,7 +17,7 @@
           <% products.forEach(product => { %>
             <div class="product-card-new">
               <h3><%= product.product_name %></h3>
-              <p><strong>מחיר:</strong> $<%= product.price_per_unit.toFixed(2) %></p>
+              <p><strong>מחיר:</strong> ₪<%= product.price_per_unit.toFixed(2) %></p>
               <p><strong>מינימום:</strong> <%= product.min_quantity %> יח'</p>
             </div>
           <% }) %>

@@ -1,5 +1,6 @@
 const sql = require('mssql');
 const { db } = require('../DBconfig');
+const inventoryModel = require('../models/inventoryModel');
 
 async function getSupplierProducts(supplierId) {
   try {
@@ -19,25 +20,6 @@ async function getSupplierProducts(supplierId) {
     throw err;
   }
 }
-
-/*async function getAllProducts() {
-  try {
-    await sql.connect(db);
-
-    const result = await sql.query`SELECT p.*, s.company_name AS supplier_name
-                                   FROM Products p
-                                   JOIN Suppliers s ON p.supplier_id = s.id`;
-    if (result.recordset.length === 0) {
-      return null;
-    }
-
-   return result.recordset
-
-  } catch (err) {
-    console.error('Error accessing DB:', err);
-    throw err;
-  }
-}*/
 
 async function getAllSuppliers() {
   try {
@@ -87,6 +69,11 @@ async function createOrderForSupplier(supplierId, items) {
         INSERT INTO OrderItems (order_id, product_id, quantity)
         VALUES (${orderId}, ${item.product_id}, ${item.quantity});
       `;
+
+      //update the grocery inventory for each item
+      const result = await sql.query`SELECT product_name FROM Products WHERE id = ${item.product_id}`;
+      const product_name = result.recordset[0].product_name;
+      await inventoryModel.updatedInventory(product_name,item.quantity)
     }
 
   } catch (err) {

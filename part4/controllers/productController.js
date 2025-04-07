@@ -62,8 +62,9 @@ async function renderProductsPage(req, res) {
         quantity: item.quantity
       }));
   
-      await productModel.createOrderForSupplier(supplierId, items);
-  
+      console.log("all good");
+      await productModel.createOrderForSupplier(cart[0].supplier_id, items);
+      console.log("opps");
       res.redirect("/grocery/orders");
   
     } catch (err) {

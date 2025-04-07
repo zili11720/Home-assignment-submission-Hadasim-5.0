@@ -2,11 +2,11 @@
 <html>
   <%- include('../partials/head') %>
   <body>
-    <%- include('../partials/header') %>
+    <%- include('../partials/manager_header') %>
 
     <main class="main-page">
       <section class="main-headline">
-        <h2>הזמן מוצרים</h2>
+        <h2 >הזמן מוצרים</h2>
         <form id="supplierFilterForm" method="GET" action="/grocery/products">
           <label for="supplierSelect">בחר ספק:</label>
           <select name="supplier_id" id="supplierSelect" onchange="this.form.submit()">
@@ -40,8 +40,7 @@
             <% products.forEach(product => { %>
               <div class="product-card-new">
                 <h3><%= product.product_name %></h3>
-                <p><strong>ספק:</strong> <%= product.supplier_name %></p>
-                <p><strong>מחיר:</strong> $<%= product.price_per_unit %></p>
+                <p><strong>מחיר:</strong> ₪<%= product.price_per_unit %></p>
                 <p><strong>מינימום:</strong> <%= product.min_quantity %> </p>
 
                 <div class="add-to-cart-row">
