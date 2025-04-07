@@ -1,5 +1,5 @@
 --part 2 Tables managment
---I used SQLite view https://sqliteonline.com/
+--I used SQLite. view https://sqliteonline.com/
 
 
 -- for refference this is the create table command:

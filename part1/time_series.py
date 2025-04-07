@@ -96,7 +96,7 @@ def process_all_days():
             writer.writerow([hour.strftime("%Y-%m-%d %H:%M:%S"), combined_results[hour]])
 
 
-#2. file devision approach+ nultiprocessing for efficency
+#2. file devision approach + nultiprocessing for effiecency
 def split_by_day(inputfile):
     Path(chunks_folder).mkdir(exist_ok=True)
     with open(inputfile, 'r') as f:
@@ -114,7 +114,9 @@ def split_by_day(inputfile):
 
 #4. parquet format
 # הפורמט שומר את המידע לפי עמודות ולא שורות 
-# וממאפשר קריאה מהירה בהרבה בצורה מקבילית על ידי קוד קצר יחסית
+# ומאפשר קריאה מהירה בהרבה בצורה מקבילית על ידי קוד קצר יחסית
+#בנוסף שמירה לפי עמודות מאפשר קריאה רק של העמודות שצריך (ולא את כל השורות)
+#הערה: נראה שבטעות קיבלנו את קובץ הפלט אז לא היה באמת צורך לנתח את הממוצע...
 def validate_and_calc_avg_parquet(parquet_file):
     df = pd.read_parquet(parquet_file)
 
@@ -141,13 +143,16 @@ def validate_and_calc_avg_parquet(parquet_file):
 
 if __name__ == "__main__":
     # for exercises 1 alone run:
-    validate_and_calc_avg("time_series.csv")
+    #validate_and_calc_avg("time_series.csv")
 
     #for exercise 3 with file splitting run:
     #split_by_day("time_series.csv")
     #process_all_days()
 
     #for exercise 4
+    # Read the Parquet file
+     df = pd.read_parquet("time_series.parquet")
+     print(df.head(4))
     #validate_and_calc_avg_parquet("time_series.parquet") 
 
-#An answer for exercise 4 in the docks file 
+#An answer for question 3 (data stream)  in the docks file 
