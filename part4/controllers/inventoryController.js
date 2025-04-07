@@ -19,7 +19,7 @@ async function purchaseAndUpdateInventory(req, res) {
     console.log(items);
     const alertMessages = [];
 
-    // Step 1: עדכון המלאי
+    //update inventory
     for (const item of items) {
       await inventoryModel.decreaseQuantity(item.product_name, item.quantity);
     }
@@ -60,6 +60,8 @@ async function purchaseAndUpdateInventory(req, res) {
 
     const updatedInventory = await inventoryModel.getInventoryProducts();
 
+
+    console.log("messege:",alertMessages.join('\n'));
     res.render("pages/inventory", {
       inventory: updatedInventory,
       alertMessage: alertMessages.join('\n')

@@ -4,6 +4,13 @@
   <body>
     <%- include('../partials/manager_header') %>
 
+    <!-- Check if there's an alertMessage and display it as a pop-up -->
+    <% if (typeof alertMessage !== 'undefined') { %>
+      <script>
+          alert("<%= alertMessage %>");
+      </script>
+      <% } %>
+
     <main class="main-page">
       <section class="main-headline">
         <h2>ניהול מלאי</h2>
@@ -52,7 +59,7 @@
             <!-- Cart items view -->
             <div id="cartItems" class="cart-items"></div>
 
-            <button type="submit" class="button primary">בצע מחירה</button>
+            <button type="submit" class="button primary">בצע מכירה</button>
           </form>
         </section>
       </div>
