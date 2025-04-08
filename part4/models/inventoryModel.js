@@ -18,6 +18,7 @@ async function getInventoryProducts() {
       }    
 }
 
+//Update the inventory after an order is made from a supplier
 async function updatedInventory(product_name, quantity) {
   try {
     await sql.connect(db);
@@ -61,6 +62,7 @@ async function decreaseQuantity(product_name, quantity) {
   }
 }
 
+//Find the supplier who offers the cheapest price for a given product
 async function findSupplierForProduct(product_name) {
   try {
     await sql.connect(db);

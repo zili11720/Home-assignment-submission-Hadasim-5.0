@@ -31,14 +31,21 @@ async function purchaseAndUpdateInventory(req, res) {
     });
 
 
-    //update inventory afetr sell
-   for (const item of items) {
-      if (!inventoryMap[item.product_name]) {
-        alertMessages.push(`לא קיים במלאי : ${item.product_name}`);
-        continue;
+    // Update inventory after sell
+    for (const item of items) {
+       const inventoryItem = inventoryMap[item.product_name];
+      
+      if (!inventoryItem) {
+          alertMessages.push(`לא קיים במלאי: ${item.product_name}`);
+          continue;
       }
-
-      await inventoryModel.decreaseQuantity(item.product_name, item.quantity);
+      
+     if (item.quantity > inventoryItem.current_quantity) {
+          alertMessages.push(`לא ניתן למכור ${item.quantity} יחידות של "${item.product_name}" – יש רק ${inventoryItem.current_quantity} במלאי.`);
+          continue;
+     }
+      
+        await inventoryModel.decreaseQuantity(item.product_name, item.quantity);
     }
 
     //Get the updates inventory
@@ -47,7 +54,7 @@ async function purchaseAndUpdateInventory(req, res) {
 
     for (const item of inventory) {
       if (item.current_quantity < item.min_quantity) {
-        // Lookgor the supplier with the cheapest price offer
+        // Look for the supplier with the cheapest price offer
         const supplier = await inventoryModel.findSupplierForProduct(item.product_name);
         if (!supplier) {
           alertMessages.push(`לא נמצא ספק עבור המוצר: ${item.product_name}`);
@@ -58,7 +65,7 @@ async function purchaseAndUpdateInventory(req, res) {
         // Take the maximum between the amount needed to refill inventory and the supplier's minimum order quantity
         const quantity = Math.max(item.min_quantity - item.current_quantity, supplier.min_quantity);
 
-        //Orgenize orders by suppliers
+        //Organize orders by suppliers
         if (!supplierOrders[supplier.supplier_id]) {
           supplierOrders[supplier.supplier_id] = [];
         }
@@ -70,16 +77,12 @@ async function purchaseAndUpdateInventory(req, res) {
       }
     }
 
-    // Make orders from dofferent suppliers
+    // Make orders from different suppliers
     for (const [supplierId, orderItems] of Object.entries(supplierOrders)) {
       await productModel.createOrderForSupplier(parseInt(supplierId), orderItems);
       const names = orderItems.map(i => `${i.quantity} ${i.product_name}`).join(', ');
       alertMessages.push(`בוצעה הזמנה לספק ${supplierId}: ${names}`);
     }
-
-    const updatedInventory = await inventoryModel.getInventoryProducts();
-
-
     console.log("messege:",alertMessages.join('\n'));
     res.redirect(`/grocery/inventory?msg=${encodeURIComponent(alertMessages.join('\n'))}`);
 
