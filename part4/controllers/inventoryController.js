@@ -5,7 +5,7 @@ async function renderInventoryPage(req,res) {
     try {
 
      const inventory = await inventoryModel.getInventoryProducts()  || [];
-      res.render("pages/inventory", { inventory});    
+      res.render("pages/inventory", { inventory, alertMessage: req.query.msg || ""});    
 
     } catch (error) {
         res.status(500).send("Server error"); 
@@ -19,8 +19,25 @@ async function purchaseAndUpdateInventory(req, res) {
     const items = JSON.parse(req.body.cartData); // [{ product_name, quantity }]
     const alertMessages = [];
 
+    //Get inventory before sell
+    const oldInventory = await inventoryModel.getInventoryProducts();
+    if (!oldInventory) {
+      return res.status(500).send("Inventory not available");
+    }
+    //Make sure all wanted items exist in the inventory
+    const inventoryMap = {};
+    oldInventory.forEach(item => {
+      inventoryMap[item.product_name] = item;
+    });
+
+
     //update inventory afetr sell
-    for (const item of items) {
+   for (const item of items) {
+      if (!inventoryMap[item.product_name]) {
+        alertMessages.push(`לא קיים במלאי : ${item.product_name}`);
+        continue;
+      }
+
       await inventoryModel.decreaseQuantity(item.product_name, item.quantity);
     }
 
@@ -37,9 +54,9 @@ async function purchaseAndUpdateInventory(req, res) {
           continue;
         }
 
-        //Calculate the quantity needed for the new order
-        const quantity = item.min_quantity - item.current_quantity;
-
+        // Calculate the quantity needed for the new order:
+        // Take the maximum between the amount needed to refill inventory and the supplier's minimum order quantity
+        const quantity = Math.max(item.min_quantity - item.current_quantity, supplier.min_quantity);
 
         //Orgenize orders by suppliers
         if (!supplierOrders[supplier.supplier_id]) {
@@ -64,10 +81,7 @@ async function purchaseAndUpdateInventory(req, res) {
 
 
     console.log("messege:",alertMessages.join('\n'));
-    res.render("pages/inventory", {
-      inventory: updatedInventory,
-      alertMessage: alertMessages.join('\n')
-    });
+    res.redirect(`/grocery/inventory?msg=${encodeURIComponent(alertMessages.join('\n'))}`);
 
   } catch (error) {
     console.error("Purchase error:", error);

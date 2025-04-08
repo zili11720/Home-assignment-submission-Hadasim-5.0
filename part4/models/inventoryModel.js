@@ -65,7 +65,7 @@ async function findSupplierForProduct(product_name) {
   try {
     await sql.connect(db);
     const result = await sql.query`
-      SELECT TOP 1 id AS product_id, supplier_id
+      SELECT TOP 1 id AS product_id, supplier_id ,	min_quantity
       FROM Products
       WHERE product_name = ${product_name}
       ORDER BY price_per_unit ASC

@@ -5,11 +5,12 @@
     <%- include('../partials/manager_header') %>
 
     <!-- Check if there's an alertMessage and display it as a pop-up -->
-    <% if (typeof alertMessage !== 'undefined') { %>
+    <% if (alertMessage && alertMessage.trim()) { %>
       <script>
-          alert("<%= alertMessage %>");
+        const msg = `<%- alertMessage.replace(/\r?\n/g, '\\n') %>`;
+        alert(msg);
       </script>
-      <% } %>
+    <% } %>
 
     <main class="main-page">
       <section class="main-headline">
@@ -46,7 +47,7 @@
           <h3>קופה</h3>
 
           <!-- Form for sending purchase -->
-          <form id="cashForm" method="POST" action="/grocery/inventory/purchase">
+          <form id="cashForm" method="POST" action="/grocery/inventory/purchase" onsubmit="return validateCart()">
             <input type="hidden" name="cartData" id="cartData" />
 
             <!-- Add product input -->
@@ -66,6 +67,7 @@
     </main>
 
     <!-- Scripts -->
+    <script src="/js/jquery.min.js"></script>
     <script>
       document.addEventListener("DOMContentLoaded", () => {
         const cart = {};
@@ -87,9 +89,6 @@
           }
 
           cart[name].quantity += quantity;
-
-          document.getElementById("productNameInput").value = "";
-          document.getElementById("quantityInput").value = 1;
 
           renderCart();
         });
@@ -118,6 +117,16 @@
           });
         }
       });
+
+      function validateCart() {
+      const cart = JSON.parse(document.getElementById("cartData").value || "[]");
+      if (!cart.length) {
+      alert("העגלה ריקה. אנא הוסף מוצרים לפני ביצוע מכירה.");
+      return false;
+     }
+  return true;
+}
+
     </script>
 
     <script src="assets/js/jquery.min.js"></script>
