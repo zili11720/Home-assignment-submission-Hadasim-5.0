@@ -15,6 +15,7 @@ async function userValidation(username, password) {
     const user = result.recordset[0];
     const hash = user.password_hash;
 
+    //Compare password's hashes
     const isMatch = await bcrypt.compare(password, hash);
 
     return isMatch ? user : null;
@@ -38,18 +39,18 @@ async function registerUser(company) {
 
     const password_hash= await bcrypt.hash(password, 10);
 
-    //insert the new supplier
+    //Insert the new supplier
     await sql.query`
     INSERT INTO Suppliers(company_name, phone, representative_name)
     VALUES (${company_name}, ${phone},${representative_name});
     `;
     
-    //get new supplier id number (auto id)
+    //Get new supplier id number (auto id)
     const result = await sql.query`SELECT id FROM Suppliers WHERE company_name = ${company_name}`;
     const supplier_id = result.recordset[0].id;
 
 
-    //insert the new user
+    //Insert the new user
     await sql.query`
     INSERT INTO Users(username, password_hash, role, supplier_id)
     VALUES (${company_name}, ${password_hash}, 'supplier', ${supplier_id} );

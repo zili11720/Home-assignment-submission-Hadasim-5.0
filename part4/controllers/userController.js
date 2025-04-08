@@ -7,6 +7,7 @@ async function login(req, res) {
     const isValidUser = await userModel.userValidation(username, password);
   
     if (isValidUser) {
+      //Keep the user's info in the session
       req.session.userId = isValidUser.id;
       req.session.supplier_id = isValidUser.supplier_id;
       req.session.role = isValidUser.role;
@@ -14,7 +15,6 @@ async function login(req, res) {
       res.redirect('/grocery/products') ;
       
     } else {
-      // If invalid, send back an error message without 
       res.render('pages/index', { alertMessage: 'Wrong username or password!' });
     }
   } catch (err) {
@@ -37,14 +37,14 @@ async function logout(req,res){
 async function signup(req,res){
   try{
     const {company_name,phone,representative_name,password} =req.body;
-    console.log("hi from signup");
+  
     await userModel.registerUser(
       { company_name,
         phone,
         representative_name,
         password }
     );
-    res.redirect('/grocery/products'); //redirect to product page
+    res.redirect('/grocery/products'); 
   }
   catch(err){
       res.render('pages/index', {

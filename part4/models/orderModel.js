@@ -1,11 +1,14 @@
 const sql = require('mssql');
 const { db } = require('../DBconfig');
 
+
 async function getSupplierOrders(supplierId) {
   try {
     await sql.connect(db);
     let result=null;
-    if(supplierId){//get orders of a specific supplier
+
+    //Get all orders from a specific supplier
+    if(supplierId){
       result = await sql.query`
       SELECT 
         o.id AS order_id,
@@ -17,10 +20,12 @@ async function getSupplierOrders(supplierId) {
       JOIN orderItems oi ON o.id = oi.order_id
       JOIN products p ON p.id=oi.product_id
       WHERE o.supplier_id = ${supplierId}
-      ORDER BY o.order_date ASC;
+      ORDER BY o.order_date DESC;
     `;
     }
-    else{//get all orders for manager
+
+    //get all orders for manager
+    else{   
       result = await sql.query`
       SELECT 
         o.id AS order_id,
@@ -31,7 +36,7 @@ async function getSupplierOrders(supplierId) {
       FROM orders o
       JOIN orderItems oi ON o.id = oi.order_id
       JOIN products p ON p.id=oi.product_id
-      ORDER BY o.order_date ASC;
+      ORDER BY o.order_date DESC;
     `;
 
     }
@@ -72,9 +77,9 @@ async function getSupplierOrders(supplierId) {
 
 async function changeStatus(order_id,role){
   try{
-
-    console.log("hi from status change");
     await sql.connect(db);
+
+    //A supplier can change status from 'Pending' to 'In progress'
     if(role=='supplier'){
       await sql.query`
       UPDATE orders
@@ -82,7 +87,8 @@ async function changeStatus(order_id,role){
       WHERE id = ${order_id}
     `;
     }
-    else{//owner
+    else{ 
+      //The owner can change status from 'In progress' to 'Completed'
       await sql.query`
       UPDATE orders
       SET status = 'Completed'

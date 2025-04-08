@@ -3,18 +3,18 @@ const productModel = require('../models/productModel');
 async function renderProductsPage(req, res) {
     try {
       if(req.session.role=='supplier'){
+
           const supplierId = req.session.supplier_id;
           const products = await productModel.getSupplierProducts(supplierId)  || [];
           res.render("pages/products", { products });
       }
       else{//owner
-        //const products = await productModel.getAllProducts()  || [];
+        
           const selectedSupplierId = req.query.supplier_id || 1;
-          console.log("hi1");
+
           const suppliers = await productModel.getAllSuppliers();
-          console.log("hi2");
           const products = await productModel.getSupplierProducts(selectedSupplierId);
-          console.log("hi3");
+
           res.render('pages/manager_products', {
            suppliers,
            products,
@@ -26,6 +26,7 @@ async function renderProductsPage(req, res) {
       res.status(500).send("Server error"); 
     }
   }
+
 
   async function addNewProduct(req, res) {
     try {
@@ -50,26 +51,24 @@ async function renderProductsPage(req, res) {
 
   async function makeOrder(req, res) {
     try {
+  
+      if (!req.body.cart) {
+         return;
+      }
+
       // Parse the cart from the hidden input field
       const cart = JSON.parse(req.body.cartData);
-  
-      if (!cart || cart.length === 0) {
-        return res.status(400).send("העגלה ריקה");
-      }
       
       const items = cart.map(item => ({
         product_id: item.id,
         quantity: item.quantity
       }));
   
-      console.log("all good");
       await productModel.createOrderForSupplier(cart[0].supplier_id, items);
-      console.log("opps");
       res.redirect("/grocery/orders");
   
     } catch (err) {
       console.error("Error in makeOrder controller:", err);
-      res.status(500).send("שגיאה ביצירת ההזמנה");
     }
   }
   

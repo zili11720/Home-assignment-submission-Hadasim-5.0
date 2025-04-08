@@ -6,7 +6,7 @@
     
     
     <main class="main-page">
-      <section class="main-title">
+      <section class="main-headline">
         <h2>המוצרים שלי
           <button id="addProductBtn" style="all: unset; border: none; background: none; ">+</button>
         </h2>
@@ -18,7 +18,7 @@
             <div class="product-card-new">
               <h3><%= product.product_name %></h3>
               <p><strong>מחיר:</strong> ₪<%= product.price_per_unit.toFixed(2) %></p>
-              <p><strong>מינימום:</strong> <%= product.min_quantity %> יח'</p>
+              <p><strong>מינימום למכירה:</strong> <%= product.min_quantity %> יח'</p>
             </div>
           <% }) %>
         </div>
