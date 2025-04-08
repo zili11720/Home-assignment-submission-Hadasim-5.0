@@ -51,19 +51,13 @@ async function renderProductsPage(req, res) {
 
   async function makeOrder(req, res) {
     try {
-  
-      if (!req.body.cart) {
-         return;
-      }
-
       // Parse the cart from the hidden input field
       const cart = JSON.parse(req.body.cartData);
-      
       const items = cart.map(item => ({
         product_id: item.id,
         quantity: item.quantity
       }));
-  
+
       await productModel.createOrderForSupplier(cart[0].supplier_id, items);
       res.redirect("/grocery/orders");
   

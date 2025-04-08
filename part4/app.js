@@ -43,12 +43,10 @@ app.listen(port, () => {
 })
 
 
-
-
-const users = [
+/*const users = [
   { username: 'herzel', password: 'admin123' },//מנהל
   { username: 'freshfarms', password: 'farm123' },
   { username: 'superveggies', password: 'veggie123' },
   { username: 'dairydaily', password: 'milk123' },
   { username: 'foodIsGood', password: 'food123' }
-];
+];*/
